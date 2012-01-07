@@ -1,0 +1,17 @@
+
+// This must be included in the main file, so that the look up table for 
+// identifiers, which is static, is initialized.
+
+#ifndef IDENTIFIER_STAT_INCLUDED
+#define IDENTIFIER_STAT_INCLUDED   1
+
+#include "identifier.h"
+
+std::map< identifier::uniquestring*, bool, identifier::uniquestring_cmp > 
+identifier::normtable =
+   std::map< identifier::uniquestring*, bool, 
+             identifier::uniquestring_cmp > ( ); 
+
+#endif
+
+
