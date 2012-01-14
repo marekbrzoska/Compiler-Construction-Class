@@ -10,14 +10,13 @@
 #include "substitution.h"
 #include "varstore.h"
 #include "typesystem.h"
+#include "parser.h"
+#include "identifier.stat"
 #include <set>
 #include <list>
 #include <vector>
 #include <iostream>
 #include <typeinfo>
-
-#include "identifier.stat"
-
 
 using namespace std;
 
@@ -33,6 +32,49 @@ ostream& operator<< ( ostream& stream, const list<tree> & treelist )
    return stream;
 }
 
+void testtokenizer( ) 
+{
+
+   tokenizer tt;
+
+   tt. scan( );
+
+   // Test the tokenizer:
+
+   while( tt. lookahead. size( ) && 
+          tt. lookahead. front( ). type != tkn_EOF )
+   {
+      cout << tt. lookahead. front( ) << "\n";
+      tt. lookahead. pop_front( ); 
+      tt. scan( ); 
+   }
+
+   // Actually if the size of lookahead gets 0, something went wrong.
+
+   ASSERT( tt. lookahead. size( ));
+   cout << tt. lookahead. front( ) << "\n";
+      // This is an EOF token. 
+}
+
+
+tree readtree( varstore& vs ) throw( error ) 
+{
+   cout << "\n"; 
+   cout << "Please type a tree to be typechecked: ";
+   tokenizer tt; 
+   parser( tt, vs, tkn_B1, 10 );
+
+   if( tt. lookahead. size( ) != 2 ||
+       tt. lookahead. front( ). type != tkn_B1 ||
+       tt. lookahead. back( ). type != tkn_SEMICOLON )
+   {
+      error err;
+      err. s << "stopped due to parsing error";
+      throw err;
+   }
+   
+   return tt. lookahead. front( ). tt. front( ); 
+}
 
 list< tree > functionlist()
 {
@@ -258,6 +300,37 @@ int main( int argc, char* argv [ ] )
                     treetype( type_ref, 
                        treetype( type_array, tt_char ))));
 
+
+      // If you want, you can assign more variables:
+
+      varstore vs;
+
+      vs. assign( "x", tt_double );
+      vs. assign( "a", tt_double );
+      vs. assign( "b", tt_double );
+      vs. assign( "c", tt_double );
+
+      vs. assign( "i", tt_int );
+      vs. assign( "j", tt_int );
+      vs. assign( "k", tt_int );
+
+      vs. assign( "table", treetype( type_array, 10, tt_int ));
+      vs. assign( "p", treetype( type_pointer, tt_double ));
+      vs. assign( "q", treetype( type_pointer, tt_double ));
+      vs. assign( "matrix", treetype( type_array, 5, 
+                               treetype( type_array, 10, tt_double )));
+      // Read one tree. 
+
+      try
+      {
+         tree res = readtree( vs ); 
+         cout << "read:\n";
+         res. prettyprint( cout ); 
+      } 
+      catch( const error& err )
+      {
+         cout << err << "\n";
+      }
       return 0;
 
       // We make our first program: 
