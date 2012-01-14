@@ -13,4 +13,7 @@ program.cpp
 runtimestate.cpp
 varstore.cpp
 typesystem.cpp
+token.cpp
+tokenizer.cpp
+parser.cpp
 

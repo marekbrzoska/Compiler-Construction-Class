@@ -314,7 +314,7 @@ identifier identifier::unique( const std::string& s )
 {
    static std::map< std::string, unsigned int > indexmap;
 
-#if 1
+#if 0
    std::cout << "uniqueness table: \n";
    for( std::map< std::string, unsigned int > :: const_iterator
            p = indexmap. begin( );

@@ -7,10 +7,10 @@ Flags = -Wreturn-type -pedantic -pedantic-errors -Wundef
 CPP = g++-4.4
 
 
-intermediate : Makefile   intermediate.o identifier.o treetype.o tree.o substitution.o data.o instruction.o flowgraph.o program.o runtimestate.o varstore.o typesystem.o 
-	$(CPP) $(Flags) -o intermediate   intermediate.o identifier.o treetype.o tree.o substitution.o data.o instruction.o flowgraph.o program.o runtimestate.o varstore.o typesystem.o 
+intermediate : Makefile   intermediate.o identifier.o treetype.o tree.o substitution.o data.o instruction.o flowgraph.o program.o runtimestate.o varstore.o typesystem.o token.o tokenizer.o parser.o 
+	$(CPP) $(Flags) -o intermediate   intermediate.o identifier.o treetype.o tree.o substitution.o data.o instruction.o flowgraph.o program.o runtimestate.o varstore.o typesystem.o token.o tokenizer.o parser.o 
 
-intermediate.o : Makefile   intermediate.cpp   identifier.stat identifier.h assert.h typesystem.h tree.h treetype.h primtype.h varstore.h substitution.h runtimestate.h program.h flowgraph.h instruction.h error.h data.h 
+intermediate.o : Makefile   intermediate.cpp   identifier.stat identifier.h assert.h parser.h token.h tree.h treetype.h primtype.h tokenizer.h reader.h typesystem.h varstore.h substitution.h runtimestate.h program.h flowgraph.h instruction.h error.h data.h 
 	$(CPP) -c $(Flags) intermediate.cpp -o  intermediate.o
 
 
@@ -56,5 +56,17 @@ varstore.o : Makefile   varstore.cpp   varstore.h treetype.h primtype.h identifi
 
 typesystem.o : Makefile   typesystem.cpp   substitution.h identifier.h assert.h treetype.h primtype.h tree.h typesystem.h 
 	$(CPP) -c $(Flags) typesystem.cpp -o  typesystem.o
+
+
+token.o : Makefile   token.cpp   token.h identifier.h assert.h tree.h treetype.h primtype.h 
+	$(CPP) -c $(Flags) token.cpp -o  token.o
+
+
+tokenizer.o : Makefile   tokenizer.cpp   data.h tokenizer.h reader.h token.h identifier.h assert.h tree.h treetype.h primtype.h 
+	$(CPP) -c $(Flags) tokenizer.cpp -o  tokenizer.o
+
+
+parser.o : Makefile   parser.cpp   parser.h token.h identifier.h assert.h tree.h treetype.h primtype.h tokenizer.h reader.h varstore.h 
+	$(CPP) -c $(Flags) parser.cpp -o  parser.o
 
 
