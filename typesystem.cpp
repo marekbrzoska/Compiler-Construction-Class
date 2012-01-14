@@ -4,6 +4,7 @@
 #include "substitution.h"
 
 
+
 const typesystem::conversion*
 typesystem::conversionset::findtype( const treetype& tt ) const 
 {
@@ -210,3 +211,32 @@ std::ostream& operator << ( std::ostream& stream, const typesystem& ts )
 }
 
 
+
+// exrc 9.1
+bool typesystem::application::strictlymoregeneralthan( const application& a ) const{
+    if ( args.size() != a.args.size() ) {
+        return false;
+    }
+    int strictly_less_counter = 0;
+    for (
+            std::list<conversion>::const_iterator mine = args.begin(),
+            his = a.args.begin();
+           
+            mine != args.end(),
+            his != a.args.end(); 
+           
+            mine++, his++
+        ) {
+        if (mine->cost < his->cost) {
+            strictly_less_counter++;
+        } else if (mine->cost > his->cost) {
+            return false;
+        }
+    }
+    if (strictly_less_counter > 0) {
+        return true;
+    } else {
+        return false;
+    }
+    std::cout << args.size();
+}
